@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,10 @@ use App\Http\Controllers\Api\UserController;
 |
 */
 
+// Routes publiques d'authentification
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
 // Routes publiques (Consultation du catalogue)
 Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
 Route::apiResource('authors', AuthorController::class)->only(['index', 'show']);
@@ -27,6 +32,9 @@ Route::apiResource('comments', CommentController::class)->only(['index']);
 
 // Routes protégées par l'authentification Sanctum (pour l'Admin ou les actions utilisateurs)
 Route::middleware('auth:sanctum')->group(function () {
+
+    // Déconnexion
+    Route::post('/logout', [AuthController::class, 'logout']);
     
     // 1. Accessible à TOUS les utilisateurs connectés (User + Admin)
     Route::get('/user', function (Request $request) {
