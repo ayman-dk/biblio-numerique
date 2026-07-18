@@ -17,11 +17,25 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'role'];
+
+    // Les commentaires postés par l'utilisateur
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // Les livres que l'utilisateur a likés
+    public function likedBooks()
+    {
+        return $this->belongsToMany(Book::class, 'book_user_likes')->withTimestamps();
+    }
+
+    // Les livres sauvegardés par l'utilisateur (Favoris)
+    public function savedBooks()
+    {
+        return $this->belongsToMany(Book::class, 'book_user_saved')->withTimestamps();
+    }
 
     /**
      * The attributes that should be hidden for serialization.
