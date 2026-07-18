@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('book_user_likes', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+
+            // Contrainte pour éviter qu'un utilisateur like 2 fois le même livre
+            $table->unique(['user_id', 'book_id']);
         });
     }
 

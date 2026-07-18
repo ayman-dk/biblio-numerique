@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('book_user_saved', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+
+            // Contrainte pour éviter qu'un utilisateur sauvegarde 2 fois le même livre
+            $table->unique(['user_id', 'book_id']);
         });
     }
 
